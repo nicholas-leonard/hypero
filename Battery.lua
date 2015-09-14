@@ -333,22 +333,24 @@ function Battery:exportTable(config)
    local res, resNames = self:getResult(hexIds, resultNames)
    local md, mdNames = self:getMeta(hexIds, metaNames)
    
+   
    -- join tables using hexId
    local tbl = {}
    local names = {hpNames, resNames, mdNames}
    
-   for i, hexId in ipairs(hexIds) do
+   for j, hexId in ipairs(hexIds) do
       local hp, res, md = hp[hexId], res[hexId], md[hexId]
-      local row = {}
-      local offset = 0
+      local row = {hexId}
+      local offset = 1
+      local n = 0
       for i,subtbl in ipairs{hp, res, md} do
          for k,v in pairs(subtbl) do
             row[k+offset] = v
+            n = n + 1
          end
          offset = offset + #names[i]
       end
-      if not _.isEmpty(row) then
-         table.insert(row, 1, hexId)
+      if n > 1 then
          table.insert(tbl, row)
       end
    end
